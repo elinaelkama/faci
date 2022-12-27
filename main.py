@@ -36,7 +36,7 @@ async def joke(ctx):
 #Gives a greeting when "Hi" is typed
 @bot.command()
 async def Hi(ctx):
-    greetings = ["Hello :smile:", "Hi :wave:", "Greetings friend :hugging:", "Helloooooooou!!!"]
+    greetings = ["Hello :smile:", "Hi :wave:", "Greetings friend :hugging:", "Helloooooooou!!!", "Hiya!", "Good tidings, good fellow :face_with_monocle:"]
     await ctx.send(f"{random.choice(greetings)}")
 
 #Gives a declaration of love when "Love" is typed
