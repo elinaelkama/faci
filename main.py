@@ -8,12 +8,6 @@ intents = discord.Intents.all()
 bot = commands.Bot(command_prefix="", intents=intents)
 intents.members = True
 
-#Gives a greeting when "Hi" is typed
-@bot.command()
-async def Hi(ctx):
-    greetings = ["Hello :smile:", "Hi :wave:", "Greetings friend :hugging:"]
-    await ctx.send(f"{random.choice(greetings)}")
-
 #Sends a direct message to the person who joined
 @bot.event
 async def on_member_join(member):
@@ -27,6 +21,7 @@ async def choose(ctx, *args):
     flavor = ["is by far the best choice", "and if you pick anything else I'll never talk to you again", "try it, you'll love it", "is clearly the only choice here", "is best by all measures"]
     await ctx.send(f'**{random.choice(choices)}** {random.choice(flavor)}.')
 
+#Send a random joke from jokeAPI
 @bot.command()
 async def joke(ctx):
     response = requests.get("https://v2.jokeapi.dev/joke/Any?safe-mode&type=single")
@@ -38,10 +33,15 @@ async def joke(ctx):
         return
     await ctx.send(f"{joke}")
 
+#Gives a greeting when "Hi" is typed
+@bot.command()
+async def Hi(ctx):
+    greetings = ["Hello :smile:", "Hi :wave:", "Greetings friend :hugging:"]
+    await ctx.send(f"{random.choice(greetings)}")
 
-# Read your bot token from the txt file in your project root:
+
+# Reads bot token
 Secret = open("api.secret", 'r')
 Secret = Secret.read()
 
-# Run the bot in an event loop:
 bot.run(Secret)
