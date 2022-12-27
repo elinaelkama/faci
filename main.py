@@ -33,6 +33,18 @@ async def joke(ctx):
         return
     await ctx.send(f"{joke}")
 
+#Send a random cat fact from catfact
+@bot.command()
+async def catfact(ctx):
+    response = requests.get("https://catfact.ninja/fact")
+    try:
+        body = response.json()
+        fact = body["fact"]
+    except Exception as error:
+        print(f"failed to retrieve fact: {error}")
+        return
+    await ctx.send(f":cat2: {fact}")
+
 #Gives a greeting when "Hi" is typed
 @bot.command()
 async def Hi(ctx):
