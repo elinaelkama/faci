@@ -36,9 +36,14 @@ async def joke(ctx):
 #Gives a greeting when "Hi" is typed
 @bot.command()
 async def Hi(ctx):
-    greetings = ["Hello :smile:", "Hi :wave:", "Greetings friend :hugging:"]
+    greetings = ["Hello :smile:", "Hi :wave:", "Greetings friend :hugging:", "Helloooooooou!!!"]
     await ctx.send(f"{random.choice(greetings)}")
 
+#Gives a declaration of love when "Love" is typed
+@bot.command()
+async def Love(ctx):
+    declarations = ["I Love You :hugging:", "Love you too", ":heart:", "I know"]
+    await ctx.send(f"{random.choice(declarations)}")
 
 # Reads bot token
 Secret = open("api.secret", 'r')
