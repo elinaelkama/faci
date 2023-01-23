@@ -3,9 +3,12 @@ import discord
 import requests
 import random
 from discord.ext import commands
+from decouple import config
+
+DISCORD_TOKEN = config('DISCORD_TOKEN', cast=str)
 
 intents = discord.Intents.all()
-bot = commands.Bot(command_prefix="", intents=intents)
+bot = commands.Bot(command_prefix="!", intents=intents)
 intents.members = True
 
 #Sends a direct message to the person who joined
@@ -15,7 +18,7 @@ async def on_member_join(member):
 
 #Choses a random item from the list given
 @bot.command()
-async def choose(ctx, *args)
+async def choose(ctx, *args):
     arguments = " ".join(args).split(",")
     choices = list(map(lambda choice: choice.strip().capitalize(), arguments))
     flavor = ["is by far the best choice", "and if you pick anything else I'll never talk to you again", "try it, you'll love it", "is clearly the only choice here", "is best by all measures"]
@@ -57,8 +60,4 @@ async def Love(ctx):
     declarations = ["I Love You :hugging:", "Love you too", ":heart:", "I know"]
     await ctx.send(f"{random.choice(declarations)}")
 
-# Reads bot token
-Secret = open("api.secret", 'r')
-Secret = Secret.read()
-
-bot.run(Secret)
+bot.run(DISCORD_TOKEN)
