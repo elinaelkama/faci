@@ -1,9 +1,13 @@
+import asyncio
 import json
 import discord
 import requests
 import random
 from discord.ext import commands
 from decouple import config
+from commands import randomChoice
+from events import onScheduledEventCreate, onScheduledEventUpdate
+from helpers import getAuditChannel, getEventChannel, listTextChannels
 
 DISCORD_TOKEN = config('DISCORD_TOKEN', cast=str)
 
@@ -11,53 +15,36 @@ intents = discord.Intents.all()
 bot = commands.Bot(command_prefix="!", intents=intents)
 intents.members = True
 
-#Sends a direct message to the person who joined
-@bot.event
-async def on_member_join(member):
-    await member.send(f"Welcome {member.name} to {member.guild}!")
 
-#Choses a random item from the list given
+#commands and events
 @bot.command()
 async def choose(ctx, *args):
-    arguments = " ".join(args).split(",")
-    choices = list(map(lambda choice: choice.strip().capitalize(), arguments))
-    flavor = ["is by far the best choice", "and if you pick anything else I'll never talk to you again", "try it, you'll love it", "is clearly the only choice here", "is best by all measures"]
-    await ctx.send(f'**{random.choice(choices)}** {random.choice(flavor)}.')
+    await ctx.send(await randomChoice.randomChoice(*args))
 
-#Send a random joke from jokeAPI
 @bot.command()
-async def joke(ctx):
-    response = requests.get("https://v2.jokeapi.dev/joke/Any?safe-mode&type=single")
-    try:
-        body = response.json()
-        joke = body["joke"]
-    except Exception as error:
-        print(f"failed to get joke: {error}")
-        return
-    await ctx.send(f"{joke}")
+async def list(ctx):
+    await ctx.send(listTextChannels(bot))
 
-#Send a random cat fact from catfact
-@bot.command()
-async def catfact(ctx):
-    response = requests.get("https://catfact.ninja/fact")
-    try:
-        body = response.json()
-        fact = body["fact"]
-    except Exception as error:
-        print(f"failed to retrieve fact: {error}")
-        return
-    await ctx.send(f":cat2: {fact}")
+@bot.event
+async def on_scheduled_event_create(event):
+    channel = getEventChannel(bot)
+    if channel is not None:
+        await channel.send(await onScheduledEventCreate.eventCreated(event))
 
-#Gives a greeting when "Hi" is typed
-@bot.command()
-async def Hi(ctx):
-    greetings = ["Hello :smile:", "Hi :wave:", "Greetings friend :hugging:", "Helloooooooou!!!", "Hiya!", "Good tidings, good fellow :face_with_monocle:"]
-    await ctx.send(f"{random.choice(greetings)}")
+@bot.event
+async def on_scheduled_event_update(before, after):
+    channel = getEventChannel(bot)
+    if channel is not None:
+        await channel.send(await onScheduledEventUpdate.eventUpdated(before, after))
 
-#Gives a declaration of love when "Love" is typed
-@bot.command()
-async def Love(ctx):
-    declarations = ["I Love You :hugging:", "Love you too", ":heart:", "I know"]
-    await ctx.send(f"{random.choice(declarations)}")
+@bot.event
+async def on_ready():
+    pass
 
 bot.run(DISCORD_TOKEN)
+
+#Sends a direct message to the person who joined
+#bot.add_listener(event.event)
+"""@bot.event
+async def on_member_join(member):
+    await member.send(f"Welcome {member.name} to {member.guild}!")"""
