@@ -1,3 +1,4 @@
+from ast import arg
 import discord
 from discord.ext import commands
 from decouple import config
@@ -14,7 +15,7 @@ intents.members = True
 
 # commands and events
 @bot.command()
-async def choose(ctx: commands.Context, *args: list):
+async def choose(ctx: commands.Context, *args: str):
     await ctx.send(await randomChoice.randomChoice(*args))
 
 
@@ -49,8 +50,6 @@ async def on_member_join(member: discord.Member):
     channel = getAuditChannel(member.guild)
     if channel is not None:
         await channel.send(await onMemberJoin.memberJoined(member))
-
-# 2 options on_raw_member_remove and on_member_remove
 
 
 @bot.event
