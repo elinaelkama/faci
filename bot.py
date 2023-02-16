@@ -3,7 +3,7 @@ import discord
 from discord.ext import commands
 from decouple import config
 from commands import randomChoice
-from events import onScheduledEventCreate, onScheduledEventUpdate, onScheduledEventDelete, onMemberJoin, onMemberBan, onMemberRemove, onMemberUnban
+from events import onScheduledEventCreate, onScheduledEventUpdate, onScheduledEventDelete, onMemberJoin, onMemberBan, onMemberRemove, onMemberUnban, onInviteCreate
 from helpers import getAuditChannel, getEventChannel, listTextChannels
 
 DISCORD_TOKEN = config('DISCORD_TOKEN', cast=str)
@@ -72,6 +72,11 @@ async def on_member_unban(guild: discord.Guild, user: discord.User):
     if channel is not None:
         await channel.send(await onMemberUnban.memberUnbanned(guild, user))
 
+@bot.event
+async def on_invite_create(invite):
+    channel = getAuditChannel(invite.guild)
+    if channel is not None:
+        await channel.send(await onInviteCreate.inviteCreated(invite))
 
 @bot.event
 async def on_ready():

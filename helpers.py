@@ -1,7 +1,5 @@
 import discord
 
-# if bot in multiple servers shows all servers channels, figure out how to use guild only
-
 
 def listTextChannels(guild: discord.Guild | None):
     if guild is None:
