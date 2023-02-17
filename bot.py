@@ -3,11 +3,19 @@ import discord
 from discord.ext import commands
 from decouple import config
 from commands import randomChoice
-from events import onScheduledEventCreate, onScheduledEventUpdate, onScheduledEventDelete, onMemberJoin, onMemberBan, onMemberRemove, onMemberUnban, onInviteCreate
+from events import onScheduledEventCreate, onScheduledEventUpdate, onScheduledEventDelete, onMemberJoin, onMemberBan, onMemberRemove, onMemberUnban, onInviteCreate, onMemberTimeout
 from helpers import getAuditChannel, getEventChannel, listTextChannels
 
 DISCORD_TOKEN = config('DISCORD_TOKEN', cast=str)
 
+"""required permissions for bot:
+    manage_channels
+    view_audit_log
+#required intents:
+    Intents.invites
+    Intents.members
+    Intents.bans
+    Intents.guild_scheduled_events"""
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix="!", intents=intents)
 intents.members = True
@@ -71,6 +79,13 @@ async def on_member_unban(guild: discord.Guild, user: discord.User):
     channel = getAuditChannel(guild)
     if channel is not None:
         await channel.send(await onMemberUnban.memberUnbanned(guild, user))
+
+"""only handles timeout"""
+@bot.event
+async def on_member_update(before: discord.Member, after: discord.Member):
+    channel = getAuditChannel(before.guild)
+    if after.timed_out_until is not None and channel is not None:
+        await channel.send(await onMemberTimeout.memberTimeout(before,after))
 
 @bot.event
 async def on_invite_create(invite):
