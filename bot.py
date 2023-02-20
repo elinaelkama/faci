@@ -2,7 +2,7 @@ from ast import arg
 import discord
 from discord.ext import commands
 from decouple import config
-from commands import randomChoice, userJoined
+from commands import randomChoice, userJoined, guildCreated
 from events import onScheduledEventCreate, onScheduledEventUpdate, onScheduledEventDelete, onMemberJoin, onMemberBan, onMemberRemove, onMemberUnban, onInviteCreate, onMemberTimeout
 from helpers import getAuditChannel, getEventChannel, listTextChannels
 
@@ -29,6 +29,11 @@ async def choose(ctx: commands.Context, *args: str):
 @bot.command()
 async def joined(ctx: commands.Context):
     await ctx.send(await userJoined.joined(ctx.author))
+
+
+@bot.command()
+async def created(ctx: commands.Context):
+    await ctx.send(await guildCreated.created(ctx.guild))
 
 
 @bot.command()
