@@ -14,6 +14,7 @@ intents = discord.Intents.default()
 intents.members = True
 intents.invites = True
 intents.bans = True
+intents.message_content = True
 intents.guild_scheduled_events = True
 bot = commands.Bot(command_prefix="!", intents=intents)
 intents.members = True
