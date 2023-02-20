@@ -3,7 +3,7 @@ import humanfriendly
 from datetime import timedelta
 
 
-async def inviteCreated(invite: discord.Invite):
+async def inviteCreate(invite: discord.Invite):
 	if invite.temporary == True:
 		return f'{invite.inviter}#{invite.inviter.discriminator} created a temporary invite.'
 	#age = await time()

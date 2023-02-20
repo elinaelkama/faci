@@ -1,7 +1,7 @@
 import discord
 
 
-async def eventUpdated(before: discord.ScheduledEvent, after: discord.ScheduledEvent):
+async def scheduledEventUpdate(before: discord.ScheduledEvent, after: discord.ScheduledEvent):
     match after.status:
         case discord.EventStatus.active:
             return f"Event **{before.name}** has started"

@@ -1,5 +1,5 @@
 import discord
 
 
-async def eventDeleted(event: discord.ScheduledEvent):
+async def scheduledEventDelete(event: discord.ScheduledEvent):
     return f'Event deleted: **{event.name}**'
