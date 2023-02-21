@@ -28,5 +28,20 @@ def getGuildMock():
 def getMemberMock():
 	mockMember = MagicMock(spec=discord.Member)
 	mockMember.name = "huuhaakettu"
+	mockMember.discriminator = 2347
 	mockMember.joined_at = getDatetimePastMock()
 	return 	mockMember
+
+def getInviteMock():
+	mockInvite = MagicMock(spec=discord.Invite)
+	mockInvite.max_age = 87000
+	mockInvite.inviter = getMemberMock()
+	mockInvite.id = "abcDEF7"
+	mockInvite.max_uses = 5
+	return 	mockInvite
+
+def getTemporaryInviteMock():
+	mockTemporaryInvite = MagicMock(spec=discord.Invite)
+	mockTemporaryInvite.temporary = True
+	mockTemporaryInvite.inviter = getMemberMock()
+	return mockTemporaryInvite
