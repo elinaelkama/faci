@@ -1,4 +1,5 @@
 *-workspace
 *.secret
 .env
+.coverage
 __pycache__/

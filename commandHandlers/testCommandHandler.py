@@ -6,7 +6,7 @@ import pytz
 
 from commandHandlers import guildCreated, randomChoice, userJoined
 from helpers import testHelper
-#, side_effects=["dog", "try it, you'll love it.", "everything everywhere all at once", "is by far the best choice."]
+
 class CommandHandlerTest(unittest.IsolatedAsyncioTestCase):
     @patch('random.choice', testHelper.getRandomChoiceMock(1))
     async def testRandomChoiceHappy(self):

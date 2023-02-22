@@ -1,5 +1,5 @@
 from datetime import datetime
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, AsyncMock
 import discord
 import pytz
 
@@ -18,10 +18,6 @@ def getGuildMock():
 	mockGuild = MagicMock(spec=discord.Guild)
 	mockGuild.name = "Murder Mittens Inc"
 	mockGuild.created_at = datetime(2022, 11, 17, 3, 57, 36, 21, pytz.UTC)
-	mockAuditLog = MagicMock(spec=discord.Guild.audit_logs)
-	mockAuditLogEntries = [MagicMock(spec=discord.AuditLogEntry)]
-	mockAuditLogEntries[0].action = discord.AuditLogAction.ban
-	mockGuild.audit_logs.return_value = mockAuditLog
 	return mockGuild
 	
 def getMemberMock():
@@ -41,26 +37,48 @@ def getInviteMock():
 	return 	mockInvite
 
 def getTemporaryInviteMock():
-	mockTemporaryInvite = MagicMock(spec=discord.Invite)
+	mockTemporaryInvite = getInviteMock()
 	mockTemporaryInvite.temporary = True
-	mockTemporaryInvite.inviter = getMemberMock()
 	return mockTemporaryInvite
 
 def getKickedMemberMock():
-	mockMember = MagicMock(spec=discord.Member)
-	mockMember.name = "zoz"
-	mockMember.discriminator = 9645
+	mockMember = getMemberMock()
 
-	mockGuild = MagicMock(spec=discord.Guild)
+	async def getAuditLogIterator(**kwargs):
+		mockAuditLogEntries = [MagicMock(spec=discord.AuditLogEntry)]
+		mockAuditLogEntries[0].action = discord.AuditLogAction.kick
+		mockAuditLogEntries[0].target = getMemberMock()
+		mockAuditLogEntries[0].reason = "Gallavanting around"
+
+		for entry in mockAuditLogEntries:
+			yield entry
+
+	mockGuild = getGuildMock()
+	mockGuild.audit_logs = getAuditLogIterator
+	
 	mockMember.guild = mockGuild
 
-	mockAuditLogEntries = [MagicMock(spec=discord.AuditLogEntry)]
-	mockAuditLogEntries[0].action = discord.AuditLogAction.kick
-	mockAuditLogEntries[0].target = getMemberMock()
-	mockAuditLogEntries[0].reason = "Gallavanting around"
+	return mockMember
 
-	mockAuditLog = MagicMock(spec=discord.Guild.audit_logs)
-	mockAuditLog.entries = mockAuditLogEntries
-	mockGuild.audit_logs.return_value = mockAuditLog
+def getRemovedMemberMock():
+	mockMember = getMemberMock()
+
+	async def getEmptyAuditLogIterator(**kwargs):
+		for entry in []:
+			yield entry
+
+	mockGuild = getGuildMock()
+	mockGuild.audit_logs = getEmptyAuditLogIterator
+	
+	mockMember.guild = mockGuild
 
 	return mockMember
+
+
+def getScheduledEventMock():
+	mockEvent = MagicMock(spec=discord.ScheduledEvent)
+	mockEvent.name = "Independence Day Celebrations"
+	mockEvent.start_time = datetime(2023, 12, 6, 14, 30, 34, 9, pytz.UTC)
+	mockEvent.channel = "General"
+	mockEvent.location = "Helsinki"
+	return mockEvent
