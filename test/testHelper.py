@@ -38,6 +38,7 @@ def getInviteMock():
 
 def getTemporaryInviteMock():
 	mockTemporaryInvite = getInviteMock()
+	mockTemporaryInvite.max_age = 143000
 	mockTemporaryInvite.temporary = True
 	return mockTemporaryInvite
 
