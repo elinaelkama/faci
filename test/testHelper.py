@@ -1,7 +1,7 @@
-from datetime import datetime
-from unittest.mock import MagicMock, AsyncMock
+from datetime import datetime, timezone
+from unittest.mock import MagicMock
 import discord
-import pytz
+
 
 
 def parseRawCommand(command: str):
@@ -11,20 +11,20 @@ def getRandomChoiceMock(i: int):
 	return lambda choices: choices[i]
 
 def getDatetimeFutureMock():
-	return datetime(2023, 7, 7, 6, 30, 31, 47, pytz.UTC)
+	return datetime(2023, 7, 7, 6, 30, 31, 47, timezone.utc)
 
 
 def getGuildMock():
 	mockGuild = MagicMock(spec=discord.Guild)
 	mockGuild.name = "Murder Mittens Inc"
-	mockGuild.created_at = datetime(2022, 11, 17, 3, 57, 36, 21, pytz.UTC)
+	mockGuild.created_at = datetime(2022, 11, 17, 3, 57, 36, 21, timezone.utc)
 	return mockGuild
 	
 def getMemberMock():
 	mockMember = MagicMock(spec=discord.Member)
 	mockMember.name = "huuhaakettu"
 	mockMember.discriminator = 2347
-	mockMember.joined_at = datetime(2023, 1, 27, 22, 12, 36, 21, pytz.UTC)
+	mockMember.joined_at = datetime(2023, 1, 27, 22, 12, 36, 21, timezone.utc)
 	mockMember.guild = getGuildMock()
 	return 	mockMember
 
@@ -79,7 +79,7 @@ def getRemovedMemberMock():
 def getScheduledEventMock():
 	mockEvent = MagicMock(spec=discord.ScheduledEvent)
 	mockEvent.name = "Independence Day Celebrations"
-	mockEvent.start_time = datetime(2023, 12, 6, 14, 30, 34, 9, pytz.UTC)
+	mockEvent.start_time = datetime(2023, 12, 6, 14, 30, 34, 9, timezone.utc)
 	mockEvent.channel = "General"
 	mockEvent.location = "Helsinki"
 	return mockEvent

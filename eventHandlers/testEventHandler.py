@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch
-from datetime import datetime
-import pytz
+from datetime import datetime, timezone
+
 
 import discord
 from eventHandlers import inviteCreate, memberBan, memberJoin, memberRemove, memberTimeout, memberUnban, scheduledEventCreate, scheduledEventDelete, scheduledEventUpdate
@@ -77,7 +77,7 @@ class TestEventHandler(unittest.IsolatedAsyncioTestCase):
 	
 	async def testScheduledEventCreate(self):
 		with patch('datetime.datetime') as pachedDatetime:
-			pachedDatetime.now.return_value = datetime(2023, 7, 3, 12, 00, 13, 34, pytz.UTC)
+			pachedDatetime.now.return_value = datetime(2023, 7, 3, 12, 00, 13, 34, timezone.utc)
 			event = testHelper.getScheduledEventMock()
 			output1 = await scheduledEventCreate.scheduledEventCreate(event)
 			self.assertRegex(output1, event.name)

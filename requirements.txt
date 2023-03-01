@@ -1,4 +1,3 @@
 python-decouple
 discord.py
 humanfriendly
-pytz
