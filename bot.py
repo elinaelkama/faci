@@ -17,7 +17,6 @@ intents.bans = True
 intents.message_content = True
 intents.guild_scheduled_events = True
 bot = commands.Bot(command_prefix="!", intents=intents)
-intents.members = True
 
 
 # commands and events
