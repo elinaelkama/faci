@@ -6,4 +6,3 @@ async def memberRemove(member: discord.Member):
         if entry.action == discord.AuditLogAction.kick:
             return f'{member.name}#{member.discriminator} was kicked from the server for: {entry.reason}'
     return f'{member.name}#{member.discriminator} has left the server'
-            

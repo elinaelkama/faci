@@ -7,9 +7,6 @@ from helpers.discordHelper import getAuditChannel, getEventChannel, listTextChan
 
 DISCORD_TOKEN = config('DISCORD_TOKEN', cast=str)
 
-"""required permissions for bot:
-    manage_channels
-    view_audit_log"""
 intents = discord.Intents.default()
 intents.members = True
 intents.invites = True
@@ -19,10 +16,10 @@ intents.guild_scheduled_events = True
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 
-# commands and events
 @bot.command()
 async def choose(ctx: commands.Context, *args: str):
     await ctx.send(await randomChoice.randomChoice(*args))
+
 
 @bot.command()
 async def joined(ctx: commands.Context):
@@ -87,27 +84,25 @@ async def on_member_unban(guild: discord.Guild, user: discord.User):
     if channel is not None:
         await channel.send(await memberUnban.memberUnban(guild, user))
 
-"""only handles timeout"""
+# only handles timeout
+
+
 @bot.event
 async def on_member_update(before: discord.Member, after: discord.Member):
     channel = getAuditChannel(before.guild)
     if after.timed_out_until is not None and channel is not None:
-        await channel.send(await memberTimeout.memberTimeout(before,after))
+        await channel.send(await memberTimeout.memberTimeout(before, after))
+
 
 @bot.event
-async def on_invite_create(invite):
+async def on_invite_create(invite: discord.Invite):
     channel = getAuditChannel(invite.guild)
     if channel is not None:
         await channel.send(await inviteCreate.inviteCreate(invite))
+
 
 @bot.event
 async def on_ready():
     pass
 
 bot.run(str(DISCORD_TOKEN))
-
-# Sends a direct message to the person who joined
-# bot.add_listener(event.event)
-"""@bot.event
-async def on_member_join(member):
-    await member.send(f"Welcome {member.name} to {member.guild}!")"""
