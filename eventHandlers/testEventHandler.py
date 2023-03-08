@@ -41,13 +41,17 @@ class TestEventHandler(unittest.IsolatedAsyncioTestCase):
         self.assertRegex(output, str(member.discriminator))
         self.assertRegex(output, "left")
 
-    async def testMemberRemoveKick(self):
         member = testHelper.getKickedMemberMock()
         output = await memberRemove.memberRemove(member)
         self.assertRegex(output, member.name)
         self.assertRegex(output, str(member.discriminator))
         self.assertRegex(output, "kicked")
         self.assertRegex(output, "Gallavanting around")
+
+        member = testHelper.getBannedMemberMock()
+        output = await memberRemove.memberRemove(member)
+        self.assertRegex(output, "banned")
+        self.assertRegex(output, "Disrupting the duke's peace")
 
     async def testMemberTimeout(self):
         before = testHelper.getMemberMock()

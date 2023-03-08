@@ -67,6 +67,26 @@ def getKickedMemberMock():
     return mockMember
 
 
+def getBannedMemberMock():
+    mockMember = getMemberMock()
+
+    async def getAuditLogIterator(**kwargs):
+        mockAuditLogEntries = [MagicMock(spec=discord.AuditLogEntry)]
+        mockAuditLogEntries[0].action = discord.AuditLogAction.ban
+        mockAuditLogEntries[0].target = getMemberMock()
+        mockAuditLogEntries[0].reason = "Disrupting the duke's peace"
+
+        for entry in mockAuditLogEntries:
+            yield entry
+
+    mockGuild = getGuildMock()
+    mockGuild.audit_logs = getAuditLogIterator
+
+    mockMember.guild = mockGuild
+
+    return mockMember
+
+
 def getRemovedMemberMock():
     mockMember = getMemberMock()
 
