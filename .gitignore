@@ -3,3 +3,4 @@
 .env
 .coverage*
 __pycache__/
+.gcloudignore
