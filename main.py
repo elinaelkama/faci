@@ -3,7 +3,9 @@ from discord.ext import commands
 from decouple import config
 from commandHandlers import randomChoice, userJoined, guildCreated
 from eventHandlers import inviteCreate, memberBan, memberJoin, memberRemove, memberTimeout, memberUnban, scheduledEventCreate, scheduledEventDelete, scheduledEventUpdate
+from healthCheck import server
 from helpers.discordHelper import getAuditChannel, getEventChannel, listTextChannels
+
 
 DISCORD_TOKEN = config('DISCORD_TOKEN', cast=str)
 
@@ -105,4 +107,8 @@ async def on_invite_create(invite: discord.Invite):
 async def on_ready():
     pass
 
+server.start()
+
 bot.run(str(DISCORD_TOKEN))
+
+server.stop()
