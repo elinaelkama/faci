@@ -3,5 +3,15 @@ steps:
     args: ["build", "-t", "gcr.io/valid-flow-381510/faci-docker-image", "."]
   - name: "gcr.io/cloud-builders/docker"
     args: ["push", "gcr.io/valid-flow-381510/faci-docker-image"]
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "run",
+        "-p",
+        "80:80",
+        "gcr.io/valid-flow-381510/faci-docker-image",
+        "python",
+        "main.py",
+      ]
 images:
   - "gcr.io/valid-flow-381510/faci-docker-image"
