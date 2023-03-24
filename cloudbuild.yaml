@@ -1,0 +1,7 @@
+steps:
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["build", "-t", "gcr.io/valid-flow-381510/faci-docker-image", "."]
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "gcr.io/valid-flow-381510/faci-docker-image"]
+images:
+  - "gcr.io/valid-flow-381510/faci-docker-image"
