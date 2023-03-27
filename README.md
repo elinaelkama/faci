@@ -2,7 +2,7 @@
 is a Discord bot, that makes reading audit logs easier and helps keep your server up to date with scheduled events
 ## Usage and Set Up
 to set up the bot on your server you just need to invite faci to join via link: (https://discord.com/api/oauth2/authorize?client_id=1054417255389216859&permissions=3216&scope=bot)
-or from [discords.bots](https://discords.com/bots/bot/1054417255389216859)
+or from [discords.com/bots](https://discords.com/bots/bot/1054417255389216859)
 ### Audit Log
 ![image](https://user-images.githubusercontent.com/95315272/227977264-113e5aa0-9fc4-48a2-9b8f-449f7875ae65.png)
 
