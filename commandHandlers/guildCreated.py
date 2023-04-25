@@ -4,7 +4,8 @@ import humanfriendly
 
 
 async def guildCreated(guild: discord.Guild):
-    timezone = guild.created_at.astimezone(datetime.timezone.utc)
+    created = guild.created_at.astimezone(datetime.timezone.utc)
+    timezone = datetime.timezone.utc
     diff: datetime.timedelta = datetime.datetime.now(
         timezone) - guild.created_at
-    return f'{guild.name} was created on {guild.created_at.strftime("%d.%m.%Y")}\nServer has been in existence for {humanfriendly.format_timespan(diff)}'
+    return f'{guild.name} was created on {created.strftime("%d.%m.%Y")}\nServer has been in existence for {humanfriendly.format_timespan(diff)}'
