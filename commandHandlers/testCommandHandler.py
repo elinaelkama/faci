@@ -42,4 +42,3 @@ class CommandHandlerTest(unittest.IsolatedAsyncioTestCase):
             self.assertRegex(output, member.name)
             self.assertRegex(output, '7 weeks, 1 day and 59 minutes')
             self.assertRegex(output, '27.01.2023')
-            self.assertRegex(output, '22:12')

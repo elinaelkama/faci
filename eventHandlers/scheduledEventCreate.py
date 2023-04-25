@@ -4,8 +4,8 @@ import humanfriendly
 
 
 async def scheduledEventCreate(event: discord.ScheduledEvent):
-    timezone = event.start_time.tzinfo
-    diff: datetime.timedelta = event.start_time - \
+    timezone = event.start_time.astimezone(datetime.timezone.utc)
+    diff: datetime.timedelta = event.start_time.astimezone(datetime.timezone.utc) - \
         datetime.datetime.now(timezone)
     arrangement = event.channel
     if event.channel is None:
