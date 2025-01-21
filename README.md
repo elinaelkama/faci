@@ -45,4 +45,4 @@ example: !choose pancakes, bacon and eggs, hashbrowns
 
 *gets the time the server was created and it's age*
 ## Reporting bugs
-To report your possible experienced bugs, please use the Issues tab in GitHub
+To report your possible experienced bugs, please join discord server https://discord.gg/Xde7C47kYD
