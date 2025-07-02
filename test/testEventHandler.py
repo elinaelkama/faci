@@ -13,7 +13,7 @@ class TestEventHandler(unittest.IsolatedAsyncioTestCase):
         self.assertRegex(output, invite.inviter.name)
         self.assertRegex(output, str(invite.inviter.discriminator))
         self.assertRegex(output, invite.id)
-        self.assertRegex(output, f'{invite.max_uses} use\(s\)')
+        self.assertRegex(output, f'{invite.max_uses} use\\(s\\)')
         self.assertRegex(output, '1 day and 10 minutes')
 
     async def testInviteCreateTemporary(self):
@@ -23,7 +23,7 @@ class TestEventHandler(unittest.IsolatedAsyncioTestCase):
         self.assertRegex(output, str(invite.inviter.discriminator))
         self.assertRegex(output, 'temporary')
         self.assertRegex(output, invite.id)
-        self.assertRegex(output, f'{invite.max_uses} use\(s\)')
+        self.assertRegex(output, f'{invite.max_uses} use\\(s\\)')
         self.assertRegex(output, '1 day, 15 hours and 43 minutes')
 
     async def testMemberJoin(self):
