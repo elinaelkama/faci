@@ -2,7 +2,17 @@ import unittest
 from unittest.mock import patch
 from datetime import datetime, timezone
 import discord
-from eventHandlers import inviteCreate, memberBan, memberJoin, memberRemove, memberTimeout, memberUnban, scheduledEventCreate, scheduledEventDelete, scheduledEventUpdate
+from eventHandlers import (
+    inviteCreate,
+    memberBan,
+    memberJoin,
+    memberRemove,
+    memberTimeout,
+    memberUnban,
+    scheduledEventCreate,
+    scheduledEventDelete,
+    scheduledEventUpdate,
+)
 from test import testHelper
 
 
@@ -13,18 +23,18 @@ class TestEventHandler(unittest.IsolatedAsyncioTestCase):
         self.assertRegex(output, invite.inviter.name)
         self.assertRegex(output, str(invite.inviter.discriminator))
         self.assertRegex(output, invite.id)
-        self.assertRegex(output, f'{invite.max_uses} use\\(s\\)')
-        self.assertRegex(output, '1 day and 10 minutes')
+        self.assertRegex(output, f"{invite.max_uses} use\\(s\\)")
+        self.assertRegex(output, "1 day and 10 minutes")
 
     async def testInviteCreateTemporary(self):
         invite = testHelper.getTemporaryInviteMock()
         output = await inviteCreate.inviteCreate(invite)
         self.assertRegex(output, invite.inviter.name)
         self.assertRegex(output, str(invite.inviter.discriminator))
-        self.assertRegex(output, 'temporary')
+        self.assertRegex(output, "temporary")
         self.assertRegex(output, invite.id)
-        self.assertRegex(output, f'{invite.max_uses} use\\(s\\)')
-        self.assertRegex(output, '1 day, 15 hours and 43 minutes')
+        self.assertRegex(output, f"{invite.max_uses} use\\(s\\)")
+        self.assertRegex(output, "1 day, 15 hours and 43 minutes")
 
     async def testMemberJoin(self):
         member = testHelper.getMemberMock()
@@ -79,16 +89,17 @@ class TestEventHandler(unittest.IsolatedAsyncioTestCase):
         self.assertRegex(output, "unbanned")
 
     async def testScheduledEventCreate(self):
-        with patch('datetime.datetime') as pachedDatetime:
+        with patch("datetime.datetime") as pachedDatetime:
             pachedDatetime.now.return_value = datetime(
-                2023, 7, 3, 12, 00, 13, 34, timezone.utc)
+                2023, 7, 3, 12, 00, 13, 34, timezone.utc
+            )
             event = testHelper.getScheduledEventMock()
             output1 = await scheduledEventCreate.scheduledEventCreate(event)
             self.assertRegex(output1, event.name)
             self.assertRegex(output1, event.channel)
-            self.assertRegex(output1, '22 weeks and 2 days')
-            self.assertRegex(output1, '06.12.2023')
-            self.assertRegex(output1, '14:30')
+            self.assertRegex(output1, "22 weeks and 2 days")
+            self.assertRegex(output1, "06.12.2023")
+            self.assertRegex(output1, "14:30")
 
             event2 = testHelper.getScheduledEventMock()
             event2.channel = None
@@ -99,7 +110,7 @@ class TestEventHandler(unittest.IsolatedAsyncioTestCase):
         event = testHelper.getScheduledEventMock()
         output = await scheduledEventDelete.scheduledEventDelete(event)
         self.assertRegex(output, event.name)
-        self.assertRegex(output, 'deleted')
+        self.assertRegex(output, "deleted")
 
     async def testScheduledEventUpdate(self):
         before = testHelper.getScheduledEventMock()
@@ -108,23 +119,23 @@ class TestEventHandler(unittest.IsolatedAsyncioTestCase):
         after1.status = discord.EventStatus.active
         output1 = await scheduledEventUpdate.scheduledEventUpdate(before, after1)
         self.assertRegex(output1, before.name)
-        self.assertRegex(output1, 'started')
+        self.assertRegex(output1, "started")
 
         after2 = testHelper.getScheduledEventMock()
         after2.status = discord.EventStatus.ended
         output2 = await scheduledEventUpdate.scheduledEventUpdate(before, after2)
         self.assertRegex(output2, before.name)
-        self.assertRegex(output2, 'ended')
+        self.assertRegex(output2, "ended")
 
         after3 = testHelper.getScheduledEventMock()
         after3.status = discord.EventStatus.canceled
         output3 = await scheduledEventUpdate.scheduledEventUpdate(before, after3)
         self.assertRegex(output3, before.name)
-        self.assertRegex(output3, 'cancelled')
+        self.assertRegex(output3, "cancelled")
 
         after4 = testHelper.getScheduledEventMock()
         after4.name = "Pancake Day Eating Contest"
         output4 = await scheduledEventUpdate.scheduledEventUpdate(before, after4)
         self.assertRegex(output4, before.name)
         self.assertRegex(output4, after4.name)
-        self.assertRegex(output4, 'updated')
+        self.assertRegex(output4, "updated")

@@ -2,12 +2,22 @@ import discord
 from discord.ext import commands
 from decouple import config
 from commandHandlers import randomChoice, userJoined, guildCreated
-from eventHandlers import inviteCreate, memberBan, memberJoin, memberRemove, memberTimeout, memberUnban, scheduledEventCreate, scheduledEventDelete, scheduledEventUpdate
+from eventHandlers import (
+    inviteCreate,
+    memberBan,
+    memberJoin,
+    memberRemove,
+    memberTimeout,
+    memberUnban,
+    scheduledEventCreate,
+    scheduledEventDelete,
+    scheduledEventUpdate,
+)
 from healthCheck import server
 from helpers.discordHelper import getAuditChannel, getEventChannel, listTextChannels
 
 
-DISCORD_TOKEN = config('DISCORD_TOKEN', cast=str)
+DISCORD_TOKEN = config("DISCORD_TOKEN", cast=str)
 
 intents = discord.Intents.default()
 intents.members = True
@@ -53,10 +63,14 @@ async def on_scheduled_event_delete(event: discord.ScheduledEvent):
 
 
 @bot.event
-async def on_scheduled_event_update(before: discord.ScheduledEvent, after: discord.ScheduledEvent):
+async def on_scheduled_event_update(
+    before: discord.ScheduledEvent, after: discord.ScheduledEvent
+):
     channel = getEventChannel(after.guild)
     if channel is not None:
-        await channel.send(await scheduledEventUpdate.scheduledEventUpdate(before, after))
+        await channel.send(
+            await scheduledEventUpdate.scheduledEventUpdate(before, after)
+        )
 
 
 @bot.event
@@ -86,6 +100,7 @@ async def on_member_unban(guild: discord.Guild, user: discord.User):
     if channel is not None:
         await channel.send(await memberUnban.memberUnban(guild, user))
 
+
 # only handles timeout
 
 
@@ -106,6 +121,7 @@ async def on_invite_create(invite: discord.Invite):
 @bot.event
 async def on_ready():
     pass
+
 
 server.start()
 
