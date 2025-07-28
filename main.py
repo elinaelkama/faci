@@ -47,9 +47,14 @@ async def created(ctx: commands.Context):
 async def list(ctx: commands.Context):
     await ctx.send(listTextChannels(ctx.guild))
 
+
 @bot.command()
 async def holiday(ctx: commands.Context, *args: str):
-    await ctx.send(await getFunHoliday.getFunHoliday(*args) if args else await getFunHoliday.getFunHoliday())
+    await ctx.send(
+        await getFunHoliday.getFunHoliday(*args)
+        if args
+        else await getFunHoliday.getFunHoliday()
+    )
 
 
 @bot.event
