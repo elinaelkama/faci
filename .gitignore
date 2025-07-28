@@ -1,6 +1,7 @@
 *-workspace
 *.secret
 .env
+.env.dev
 .coverage*
 __pycache__/
 .gcloudignore
