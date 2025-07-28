@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from decouple import config
-from commandHandlers import randomChoice, userJoined, guildCreated
+from commandHandlers import getFunHoliday, randomChoice, userJoined, guildCreated
 from eventHandlers import (
     inviteCreate,
     memberBan,
@@ -46,6 +46,10 @@ async def created(ctx: commands.Context):
 @bot.command()
 async def list(ctx: commands.Context):
     await ctx.send(listTextChannels(ctx.guild))
+
+@bot.command()
+async def holiday(ctx: commands.Context, *args: str):
+    await ctx.send(await getFunHoliday.getFunHoliday(*args) if args else await getFunHoliday.getFunHoliday())
 
 
 @bot.event
