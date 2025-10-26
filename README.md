@@ -44,5 +44,16 @@ example: !choose pancakes, bacon and eggs, hashbrowns
 3. !created 
 
 *gets the time the server was created and it's age*
+
+4. !holiday
+
+*returns what special day it is
+
+5. !roll
+
+*rolls dice
+example: !roll 4d10 -5
+example: !roll d20
+example: !roll 150 - 3d8 + 6d3
 ## Reporting bugs
 To report your possible experienced bugs, please join discord server https://discord.gg/Xde7C47kYD

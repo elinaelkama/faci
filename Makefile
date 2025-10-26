@@ -64,6 +64,8 @@ docker-build:
 docker-run:
 	docker run --env-file .env faci-discord-bot
 
+#docker save -o faci-bot-1.2.0.tar faci-bot:1.2.0
+
 dev: venv install-dev
 	@echo "Development environment setup complete!"
 	@echo "Activate virtual environment with: .\venv\Scripts\Activate.ps1"

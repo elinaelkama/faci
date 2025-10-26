@@ -56,6 +56,11 @@ async def holiday(ctx: commands.Context, *args: str):
         else await getFunHoliday.getFunHoliday()
     )
 
+@bot.command()
+async def roll(ctx: commands.Context, *args: str):
+    from commandHandlers import rollDie
+
+    await ctx.send(await rollDie.rollDie(*args))
 
 @bot.event
 async def on_scheduled_event_create(event: discord.ScheduledEvent):
