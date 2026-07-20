@@ -79,34 +79,34 @@ Current event-related events that are posted to the event-channel
 
 ### Commands
 ![image](https://user-images.githubusercontent.com/95315272/227976915-e7385c95-b1d3-40ed-963a-cf5e3841a935.png)
-All faci commands start with the !-prefix.
-1. !choose 
+Faci uses slash commands. All commands start with "/". Example pictures use the old "!"-prefix.
+1. /choose 
 *get a random option from a comma separated list you provide*
 
 example: !choose pancakes, bacon and eggs, hashbrowns
 
-2. !joined 
+2. /joined 
 
 *returns the time you joined and how long you've been on the server*
 
 <img width="394" height="125" alt="image" src="https://github.com/user-attachments/assets/95bdbe5a-83ed-44f2-8e71-a0b82a2c7df6" />
 
 
-3. !created 
+3. /created 
 
 *gets the time the server was created and it's age*
 
 <img width="369" height="122" alt="image" src="https://github.com/user-attachments/assets/7b21ae2a-e18d-4595-a0d5-568d8f162388" />
 
 
-4. !holiday
+4. /holiday
 
 *returns what special day it is
 
 <img width="388" height="103" alt="image" src="https://github.com/user-attachments/assets/eeb8243d-26f9-470e-9b5b-e503eb76f91c" />
 
 
-5. !roll
+5. /roll
 
 *rolls dice
 example: !roll 4d10 -5
@@ -115,7 +115,7 @@ example: !roll 150 - 3d8 + 6d3
 
 <img width="179" height="121" alt="image" src="https://github.com/user-attachments/assets/21416d90-9169-45a3-8289-8f4f957a0409" />
 
-6. !list
+6. /list
 *returns a list of all text channels
 
 <img width="190" height="140" alt="image" src="https://github.com/user-attachments/assets/a309198a-a30c-4103-8ade-f69cf8720ced" />
