@@ -67,25 +67,14 @@ else
     --exclude='.ruff_cache' \
     --exclude='.env' \
     . | tar -xf - -C "${BUILD_CTX_DIR}"
-fi
-
-echo "Building Docker image ${IMAGE_NAME}:${IMAGE_TAG}..."
-if ! docker build -t "${IMAGE_NAME}:${IMAGE_TAG}" .; then
-  echo "Docker build failed; retrying with BuildKit disabled..."
-  DOCKER_BUILDKIT=0 docker build -t "${IMAGE_NAME}:${IMAGE_TAG}" .
-fi
-
-echo "Saving image to ${TAR_FILE}..."
-docker save "${IMAGE_NAME}:${IMAGE_TAG}" -o "${TAR_FILE}"
-
-echo "Copying image to ${DEPLOY_USER}@${DEPLOY_SERVER}:${REMOTE_DIR}/${TAR_FILE}..."
-scp "${TAR_FILE}" "${DEPLOY_USER}@${DEPLOY_SERVER}:${REMOTE_DIR}/${TAR_FILE}"
+fi${DEPLOY_USER}@${DEPLOY_SERVER}:${REMOTE_DIR}/${TAR_FILE}"
 
 echo "Loading image and restarting on server..."
 ssh "${DEPLOY_USER}@${DEPLOY_SERVER}" bash <<EOF
   set -euo pipefail
   cd ${REMOTE_DIR}
   docker load -i ${TAR_FILE}
+  sed -i -E "0,/^[[:space:]]*image:/s#^([[:space:]]*image:[[:space:]]*).*$#\1${IMAGE_REF}#" docker-compose.yml
   docker compose down
   docker compose up -d
   rm -f ${TAR_FILE}
