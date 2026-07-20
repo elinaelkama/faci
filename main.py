@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
-from decouple import config
-from commandHandlers import getFunHoliday, randomChoice, userJoined, guildCreated
+import decouple
+from commandHandlers import getFunHoliday, randomChoice, userJoined, guildCreated, rollDie
 from eventHandlers import (
     inviteCreate,
     memberBan,
@@ -13,54 +13,71 @@ from eventHandlers import (
     scheduledEventDelete,
     scheduledEventUpdate,
 )
-from healthCheck import server
+import healthCheck.server
 from helpers.discordHelper import getAuditChannel, getEventChannel, listTextChannels
+import datetime
 
 
-DISCORD_TOKEN = config("DISCORD_TOKEN", cast=str)
+DISCORD_TOKEN = decouple.config("DISCORD_TOKEN", cast=str)
 
 intents = discord.Intents.default()
 intents.members = True
 intents.invites = True
 intents.bans = True
-intents.message_content = True
 intents.guild_scheduled_events = True
-bot = commands.Bot(command_prefix="!", intents=intents)
+
+class SlashBot(commands.Bot):
+    def __init__(self) -> None:
+        super().__init__(command_prefix=".", intents=intents)
+
+    async def setup_hook(self) -> None:
+        # Global sync makes slash commands available in every guild the bot is in.
+        await self.tree.sync()
+
+bot = SlashBot()
+
+@bot.tree.command(name="ping", description="...")
+async def _ping(interaction: discord.Interaction) -> None:
+    await interaction.response.send_message("pong")
 
 
-@bot.command()
-async def choose(ctx: commands.Context, *args: str):
-    await ctx.send(await randomChoice.randomChoice(*args))
-
-
-@bot.command()
-async def joined(ctx: commands.Context):
-    await ctx.send(await userJoined.userJoined(ctx.author))
-
-
-@bot.command()
-async def created(ctx: commands.Context):
-    await ctx.send(await guildCreated.guildCreated(ctx.guild))
-
-
-@bot.command()
-async def list(ctx: commands.Context):
-    await ctx.send(listTextChannels(ctx.guild))
-
-
-@bot.command()
-async def holiday(ctx: commands.Context, *args: str):
-    await ctx.send(
-        await getFunHoliday.getFunHoliday(*args)
-        if args
-        else await getFunHoliday.getFunHoliday()
+@bot.tree.command(name="choose", description="Choose from a list of options")
+async def _choose(interaction: discord.Interaction, choices: str) -> None:
+    await interaction.response.send_message(
+        await randomChoice.randomChoice(choices)
     )
 
-@bot.command()
-async def roll(ctx: commands.Context, *args: str):
-    from commandHandlers import rollDie
 
-    await ctx.send(await rollDie.rollDie(*args))
+@bot.tree.command(name="joined", description="Get the date you joined the server")
+async def _joined(interaction: discord.Interaction) -> None:
+    await interaction.response.send_message(
+        await userJoined.userJoined(interaction.user)
+    )
+
+
+@bot.tree.command(name="created", description="Get the date the server was created")
+async def _created(interaction: discord.Interaction) -> None:
+    await interaction.response.send_message(
+        await guildCreated.guildCreated(interaction.guild)
+    )
+
+
+@bot.tree.command(name="list", description="List all text channels in the server")
+async def _list(interaction: discord.Interaction) -> None:
+    await interaction.response.send_message(
+        listTextChannels(interaction.guild)
+    )
+
+
+@bot.tree.command(name="holiday", description="Get a fun holiday for a given date")
+async def _holiday(interaction: discord.Interaction, date: str = None) -> None:
+    await interaction.response.send_message(
+        await getFunHoliday.getFunHoliday(date) if date else await getFunHoliday.getFunHoliday()
+    )
+
+@bot.tree.command(name="roll", description="Roll a die")
+async def _roll(interaction: discord.Interaction, args: str) -> None:
+    await interaction.response.send_message(await rollDie.rollDie(args))
 
 @bot.event
 async def on_scheduled_event_create(event: discord.ScheduledEvent):
@@ -116,12 +133,11 @@ async def on_member_unban(guild: discord.Guild, user: discord.User):
 
 
 # only handles timeout
-
-
 @bot.event
 async def on_member_update(before: discord.Member, after: discord.Member):
     channel = getAuditChannel(before.guild)
-    if after.timed_out_until is not None and channel is not None:
+    now = datetime.datetime.now()
+    if after.timed_out_until is not None and after.timed_out_until > now and channel is not None:
         await channel.send(await memberTimeout.memberTimeout(before, after))
 
 
@@ -137,8 +153,8 @@ async def on_ready():
     pass
 
 
-server.start()
+healthCheck.server.start()
 
 bot.run(str(DISCORD_TOKEN))
 
-server.stop()
+healthCheck.server.stop()

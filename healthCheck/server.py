@@ -1,6 +1,6 @@
 import threading
 import http.server
-from decouple import config
+import decouple
 import socketserver
 
 
@@ -13,7 +13,7 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
 
 
 def __startServer(stopEvent):
-    PORT = config("PORT", cast=int)
+    PORT = decouple.config("PORT", cast=int)
     with socketserver.TCPServer(("", PORT), MyHandler) as httpd:
         print(f"Health server running on port {PORT}...")
         httpd.timeout = 1
