@@ -1,6 +1,6 @@
 services:
   faci-bot:
-    image: faci-bot:1.2.0
+    image: faci-bot:1.3.0
     build:
       context: .
       dockerfile: Dockerfile
